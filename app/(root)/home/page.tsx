@@ -100,7 +100,7 @@ export default function HomePage() {
 
   return (
     <main className="font-body min-h-screen overflow-hidden bg-[linear-gradient(135deg,#07020b_0%,#1a0310_42%,#4a0624_100%)] text-white">
-      <section className="relative min-h-[620px] px-4 pb-8 pt-[128px] sm:px-6 sm:pt-[150px] lg:min-h-[720px] lg:px-9 lg:pt-[160px]">
+      <section className="relative min-h-[620px] px-4 pb-10 pt-[128px] sm:px-6 sm:pt-[150px] lg:min-h-[720px] lg:px-9 lg:pt-[160px]">
         <div className="absolute inset-0">
           {heroMovies.map((movie, index) => (
             <Image
@@ -177,7 +177,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative z-20 -mt-[105px] px-4 pb-8 sm:-mt-[120px] sm:px-6 sm:pb-10 lg:-mt-[150px] lg:px-9 lg:pb-12">
+      <section className="relative z-20 -mt-[105px] px-4 pb-10 sm:-mt-[120px] sm:px-6 sm:pb-10 lg:-mt-[150px] lg:px-9 lg:pb-12">
         <div className="mb-4 flex items-center gap-2">
           <h2 className="font-script text-[36px] font-semibold leading-none text-[#ff75bd] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] sm:text-[42px]">
             Popular Picks
@@ -200,7 +200,7 @@ export default function HomePage() {
       {data.categories.map((category) => (
         <section
           key={category.title}
-          className="px-4 pb-8 sm:px-6 sm:pb-10 lg:px-9 lg:pb-12"
+          className="px-4 pb-10 sm:px-6 sm:pb-10 lg:px-9 lg:pb-12"
         >
           <h2 className="mb-3 font-script text-[28px] font-semibold leading-none text-[#ff75bd] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] sm:mb-4 sm:text-[42px]">
             {category.title}

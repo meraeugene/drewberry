@@ -35,7 +35,7 @@ export function Navbar() {
     >
       <div className="flex h-[68px] items-center gap-8 px-4 md:px-9">
         <Link href="/home" className="flex shrink-0 items-center gap-2">
-          <span className="font-script text-[44px] font-semibold leading-none text-[#ff5fb6]">
+          <span className="font-script text-[32px] md:text-[44px] font-semibold leading-none text-[#ff5fb6]">
             drewberry
           </span>
           <Image

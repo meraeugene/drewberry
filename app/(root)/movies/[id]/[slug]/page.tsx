@@ -60,9 +60,10 @@ export default function MovieDetailsPage() {
 
   const currentMovie = movie.data;
   const suggestedMovies = (suggestions.data ?? []).slice(0, 5);
-  const watchUrl = /^(movie|tv)-\d+$/.test(currentMovie.id) || /^\d+$/.test(currentMovie.id)
-    ? playerUrl(currentMovie.id)
-    : currentMovie.trailer_url;
+  const watchUrl =
+    /^(movie|tv)-\d+$/.test(currentMovie.id) || /^\d+$/.test(currentMovie.id)
+      ? playerUrl(currentMovie.id)
+      : currentMovie.trailer_url;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#07020b] text-white">
@@ -119,9 +120,6 @@ export default function MovieDetailsPage() {
               <span className="rounded-[5px] border border-white/34 px-2.5 py-1 text-[16px]">
                 {currentMovie.quality}
               </span>
-              <span className="rounded-[5px] border border-white/34 px-2.5 py-1 text-[16px]">
-                CC
-              </span>
             </div>
 
             <p className="mt-5 max-w-[720px] text-[14px] leading-6 text-white/92 sm:mt-7 sm:text-[17px] sm:leading-8 lg:max-w-[850px]">
@@ -149,7 +147,7 @@ export default function MovieDetailsPage() {
           </div>
         </section>
 
-        <section className="grid gap-16 border-t border-white/10 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)] lg:gap-24 lg:px-9">
+        <section className="grid gap-12 border-t border-white/10 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)] lg:gap-24 lg:px-9">
           <div>
             <h2 className="font-script text-[32px] font-semibold text-[#ff75bd] sm:text-[34px]">
               Details
