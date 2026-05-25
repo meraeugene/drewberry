@@ -59,7 +59,7 @@ function PosterCard({ movie }: { movie: HomeMovie }) {
   return (
     <Link
       href={moviePath(movie.id, movie.title)}
-      className="poster-float-card relative aspect-[2/3] h-[210px] min-w-[140px] cursor-pointer overflow-hidden rounded-[7px] bg-[#240414] shadow-[0_18px_38px_rgba(0,0,0,0.32)] ring-1 ring-[#f472b6]/20 hover:ring-[#ff75bd]/70 sm:h-[300px] sm:min-w-[200px] lg:h-[330px] lg:min-w-[220px]"
+      className="poster-float-card relative aspect-[2/3] h-[210px] min-w-[140px] cursor-pointer overflow-hidden rounded-[7px] bg-[#240414] shadow-[0_18px_38px_rgba(0,0,0,0.32)]  sm:h-[300px] sm:min-w-[200px] lg:h-[330px] lg:min-w-[220px]"
     >
       <Image
         src={movie.posterUrl}
