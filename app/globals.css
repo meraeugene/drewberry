@@ -1,26 +1,145 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #12030a;
+  --foreground: #fff7fd;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #12030a;
+  --foreground: #fff7fd;
 }
 
 body {
-  background: var(--background);
+  background:
+    linear-gradient(135deg, #07020b 0%, #1a0310 42%, #4a0624 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select,
+label,
+p,
+a,
+span {
+  font-family: inherit;
+}
+
+::selection {
+  background: #ec4899;
+  color: white;
+}
+
+.font-body {
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+}
+
+.font-script {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+.poster-float-card {
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--poster-radius, 7px);
+  transition: border-color 260ms ease;
+}
+
+.poster-float-card:hover {
+  z-index: 30;
+}
+
+.poster-float-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 18%,
+    transparent 38%
+  );
+  opacity: 0;
+  transform: translateX(-70%);
+  transition:
+    opacity 260ms ease,
+    transform 520ms ease;
+}
+
+.poster-float-card:hover::after {
+  opacity: 1;
+  transform: translateX(70%);
+}
+
+.poster-float-media {
+  border-radius: inherit;
+}
+
+.poster-float-card img {
+  border-radius: inherit;
+}
+
+.poster-skeleton-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 117, 189, 0.12), transparent 56%),
+    linear-gradient(135deg, #2a0715 0%, #17040c 100%);
+}
+
+.poster-skeleton-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 38%,
+    transparent 72%
+  );
+  transform: translateX(-100%);
+  animation: poster-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes poster-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.cinematic-heading {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 700;
+  line-height: 0.95;
+  color: #3b1749;
+}
+
+.dark .cinematic-heading {
+  color: #fff7fd;
+  text-shadow: 0 14px 42px rgba(236, 72, 153, 0.28);
+}
+
+.luxury-muted {
+  color: #7b6685;
+}
+
+.dark .luxury-muted {
+  color: rgba(236, 214, 255, 0.72);
 }
