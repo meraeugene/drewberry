@@ -133,14 +133,15 @@ export default function MovieDetailsPage() {
               {currentMovie.title}
             </h1>
 
-            <div className="relative h-0 pb-[56.25%] ">
-              <iframe
-                src={watchUrl}
-                title={currentMovie.title}
-                allowFullScreen
-                className="sm:hidden mt-6 aspect-video  rounded-[7px] position: absolute; top: 0; left: 0; width: 100%; height: 100%; "
-              ></iframe>
-            </div>
+            <iframe
+              src={watchUrl}
+              title={currentMovie.title}
+              width="100%"
+              height="100%"
+              allowFullScreen
+              allow="encrypted-media"
+              className="sm:hidden mt-6  rounded-[7px] "
+            ></iframe>
 
             <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
               <span className="flex items-center gap-2 rounded-[7px] bg-white/10 px-3 py-1.5">
