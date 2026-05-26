@@ -49,7 +49,7 @@ function PlayerFrame({
   className?: string;
 }) {
   return (
-    <div className={cn("aspect-video w-full ", className)}>
+    <div className={cn("relative, pb-[56.25%], h-0", className)}>
       <iframe
         src={src}
         title={title}
