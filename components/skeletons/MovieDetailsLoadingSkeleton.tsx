@@ -21,7 +21,7 @@ export function MovieDetailsLoadingSkeleton() {
         <section className="px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-32 lg:px-9 lg:pb-12">
           <div className="mb-5 h-10 w-10 animate-pulse rounded-full bg-black/36 ring-1 ring-white/12" />
           <div className="h-9 w-28 animate-pulse rounded bg-[#ff75bd]/30 sm:h-11 sm:w-32" />
-          <div className="mt-4 h-20 w-[min(680px,84vw)] animate-pulse rounded bg-white/10 sm:mt-5 sm:h-28 lg:w-[min(900px,84vw)]" />
+          <div className="mt-4 h-10 w-[min(680px,84vw)] animate-pulse rounded bg-white/10 sm:mt-5 sm:h-28 lg:w-[min(900px,84vw)]" />
 
           <div className="poster-skeleton-card mt-5 aspect-video w-full min-h-[210px] rounded-[8px] ring-1 ring-white/14 sm:hidden" />
 

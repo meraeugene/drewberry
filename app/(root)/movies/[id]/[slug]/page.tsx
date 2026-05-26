@@ -4,7 +4,7 @@ import { ArrowLeft, Film, Play, Server, Sparkles, Star, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { type IframeHTMLAttributes, useState } from "react";
+import { type IframeHTMLAttributes, useEffect, useState } from "react";
 import { MediaCarousel } from "@/components/common/MediaCarousel";
 import { ErrorState } from "@/components/common/ErrorState";
 import { MovieDetailsLoadingSkeleton } from "@/components/skeletons/MovieDetailsLoadingSkeleton";
@@ -29,11 +29,12 @@ function releaseDate(year: number) {
   return String(year);
 }
 
-type PlayerServer = "vidking" | "videasy";
+type PlayerServer = "vidking" | "videasy" | "vidsrc";
 
 const playerServers: { id: PlayerServer; label: string }[] = [
   { id: "vidking", label: "Server 1" },
   { id: "videasy", label: "Server 2" },
+  { id: "vidsrc", label: "Server 3" },
 ];
 
 function getMediaId(id: string) {
@@ -50,11 +51,13 @@ function playerUrl({
   id,
   season,
   episode,
+  autoPlay,
 }: {
   server: PlayerServer;
   id: string;
   season: number;
   episode: number;
+  autoPlay: boolean;
 }) {
   const media = getMediaId(id);
   if (!media) return "";
@@ -63,7 +66,7 @@ function playerUrl({
   if (server === "vidking") {
     const params = new URLSearchParams({
       color: "EC4899",
-      autoPlay: "true",
+      autoPlay: String(autoPlay),
     });
 
     if (media.type === "tv") {
@@ -77,21 +80,49 @@ function playerUrl({
   }
 
   // VIDEASY
-  const params = new URLSearchParams({
-    overlay: "true",
-    color: "EC4899",
-    autoPlay: "true",
-  });
+  if (server === "videasy") {
+    const params = new URLSearchParams({
+      overlay: "true",
+      color: "EC4899",
+      autoPlay: String(autoPlay),
+    });
 
-  if (media.type === "tv") {
-    params.set("nextEpisode", "true");
-    params.set("episodeSelector", "true");
-    params.set("autoplayNextEpisode", "true");
+    if (media.type === "tv") {
+      params.set("nextEpisode", "true");
+      params.set("episodeSelector", "true");
+      params.set("autoplayNextEpisode", String(autoPlay));
 
-    return `https://player.videasy.net/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+      return `https://player.videasy.net/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+    }
+
+    return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
   }
 
-  return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
+  // VIDSRC
+  if (media.type === "tv") {
+    return `https://vidsrc-embed.ru/embed/tv/${media.id}/${season}/${episode}`;
+  }
+
+  return `https://vidsrc-embed.ru/embed/movie/${media.id}`;
+}
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+
+    function updateMatches() {
+      setMatches(mediaQuery.matches);
+    }
+
+    updateMatches();
+    mediaQuery.addEventListener("change", updateMatches);
+
+    return () => mediaQuery.removeEventListener("change", updateMatches);
+  }, [query]);
+
+  return matches;
 }
 
 const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
@@ -140,6 +171,7 @@ export default function MovieDetailsPage() {
   const [selectedServer, setSelectedServer] = useState<PlayerServer>("vidking");
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const isDesktopViewport = useMediaQuery("(min-width: 1024px)");
 
   if (movie.isLoading || suggestions.isLoading)
     return <MovieDetailsLoadingSkeleton />;
@@ -164,12 +196,22 @@ export default function MovieDetailsPage() {
   const episodeCount = activeSeason?.episode_count ?? 1;
   const activeSeasonNumber = activeSeason?.season_number ?? selectedSeason;
   const activeEpisode = Math.min(selectedEpisode, episodeCount);
-  const watchUrl = media
+  const inlineWatchUrl = media
     ? playerUrl({
         server: selectedServer,
         id: currentMovie.id,
         season: activeSeasonNumber,
         episode: activeEpisode,
+        autoPlay: false,
+      })
+    : currentMovie.trailer_url;
+  const playbackWatchUrl = media
+    ? playerUrl({
+        server: selectedServer,
+        id: currentMovie.id,
+        season: activeSeasonNumber,
+        episode: activeEpisode,
+        autoPlay: true,
       })
     : currentMovie.trailer_url;
   const playerTitle = isTvShow
@@ -208,15 +250,17 @@ export default function MovieDetailsPage() {
               {currentMovie.title}
             </h1>
 
-            <iframe
-              src={watchUrl}
-              title={playerTitle}
-              width="100%"
-              height="100%"
-              allowFullScreen
-              allow="encrypted-media"
-              className="lg:hidden mt-6 aspect-video w-full rounded-[7px] bg-black shadow-[0_18px_38px_rgba(0,0,0,0.32)] "
-            ></iframe>
+            {isDesktopViewport === false ? (
+              <iframe
+                src={inlineWatchUrl}
+                title={playerTitle}
+                width="100%"
+                height="100%"
+                allowFullScreen
+                allow="encrypted-media; fullscreen; picture-in-picture"
+                className="mt-6 aspect-video w-full rounded-[7px] bg-black shadow-[0_18px_38px_rgba(0,0,0,0.32)]"
+              ></iframe>
+            ) : null}
 
             {media ? (
               <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -405,7 +449,7 @@ export default function MovieDetailsPage() {
               <X className="h-5 w-5" />
             </button>
             <PlayerFrame
-              src={isTrailerOpen ? currentMovie.trailer_url : watchUrl}
+              src={isTrailerOpen ? currentMovie.trailer_url : playbackWatchUrl}
               title={
                 isTrailerOpen ? `${currentMovie.title} trailer` : playerTitle
               }
