@@ -137,11 +137,8 @@ export default function MovieDetailsPage() {
               <iframe
                 src={watchUrl}
                 title={currentMovie.title}
-                width="100%"
-                height="100%"
                 allowFullScreen
-                allow="encrypted-media"
-                className="sm:hidden mt-6 aspect-video  rounded-[7px] "
+                className="sm:hidden mt-6 aspect-video  rounded-[7px] position: absolute; top: 0; left: 0; width: 100%; height: 100%; "
               ></iframe>
             </div>
 
