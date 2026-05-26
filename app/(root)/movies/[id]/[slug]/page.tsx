@@ -39,6 +39,16 @@ function playerUrl(id: string) {
   return `https://player.videasy.net/movie/${id}?overlay=true&color=EC4899`;
 }
 
+const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
+  webkitallowfullscreen: string;
+  mozallowfullscreen: string;
+} = {
+  allow: "autoplay; fullscreen; encrypted-media; picture-in-picture",
+  allowFullScreen: true,
+  webkitallowfullscreen: "true",
+  mozallowfullscreen: "true",
+};
+
 function PlayerFrame({
   src,
   title,
@@ -49,14 +59,17 @@ function PlayerFrame({
   className?: string;
 }) {
   return (
-    <div className={cn("relative, pb-[56.25%], h-0", className)}>
+    <div
+      className={cn(
+        "relative aspect-video w-full overflow-hidden bg-black",
+        className,
+      )}
+    >
       <iframe
         src={src}
         title={title}
-        width="100%"
-        height="100%"
-        allowFullScreen
-        allow="encrypted-media"
+        {...fullscreenIframeProps}
+        className="movie-player-frame absolute inset-0 h-full w-full"
       />
     </div>
   );

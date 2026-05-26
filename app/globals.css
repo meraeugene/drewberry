@@ -20,8 +20,7 @@
 }
 
 body {
-  background:
-    linear-gradient(135deg, #07020b 0%, #1a0310 42%, #4a0624 100%);
+  background: linear-gradient(135deg, #07020b 0%, #1a0310 42%, #4a0624 100%);
   color: var(--foreground);
   font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
   text-rendering: geometricPrecision;
@@ -142,16 +141,4 @@ span {
 
 .dark .luxury-muted {
   color: rgba(236, 214, 255, 0.72);
-}
-
-.movie-player-frame {
-  display: block;
-  border: 0;
-  background: #000;
-}
-
-.movie-player-frame:fullscreen,
-.movie-player-frame:-webkit-full-screen {
-  width: 100vw;
-  height: 100vh;
 }
