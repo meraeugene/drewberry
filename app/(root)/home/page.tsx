@@ -179,7 +179,7 @@ export default function HomePage() {
 
       <section className="relative z-20 -mt-[105px] px-4 pb-10 sm:-mt-[120px] sm:px-6 sm:pb-10 lg:-mt-[150px] lg:px-9 lg:pb-12">
         <div className=" flex items-center gap-2">
-          <h2 className="font-script text-[36px] font-semibold leading-none sm:mb-2 text-[#ff75bd] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] sm:text-[42px] ">
+          <h2 className="font-script text-[28px] font-semibold leading-none sm:mb-2 text-[#ff75bd] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] sm:text-[42px] ">
             Popular Picks
           </h2>
           <Image
