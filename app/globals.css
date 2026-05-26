@@ -143,3 +143,15 @@ span {
 .dark .luxury-muted {
   color: rgba(236, 214, 255, 0.72);
 }
+
+.movie-player-frame {
+  display: block;
+  border: 0;
+  background: #000;
+}
+
+.movie-player-frame:fullscreen,
+.movie-player-frame:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+}

@@ -10,7 +10,7 @@ import { ErrorState } from "@/components/common/ErrorState";
 import { MovieDetailsLoadingSkeleton } from "@/components/skeletons/MovieDetailsLoadingSkeleton";
 import { useMovie } from "@/hooks/useMovie";
 import { useMovieSuggestions } from "@/hooks/useMovieSuggestions";
-import { moviePath } from "@/lib/utils";
+import { cn, moviePath } from "@/lib/utils";
 
 function formatDuration(minutes: number) {
   if (!minutes) return "Runtime TBA";
@@ -43,11 +43,37 @@ const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
   webkitallowfullscreen: string;
   mozallowfullscreen: string;
 } = {
-  allow: "autoplay; fullscreen *; encrypted-media; picture-in-picture",
+  allow: "autoplay; fullscreen; encrypted-media; picture-in-picture",
   allowFullScreen: true,
   webkitallowfullscreen: "true",
   mozallowfullscreen: "true",
 };
+
+function PlayerFrame({
+  src,
+  title,
+  className,
+}: {
+  src: string;
+  title: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative aspect-video w-full overflow-hidden bg-black",
+        className,
+      )}
+    >
+      <iframe
+        src={src}
+        title={title}
+        {...fullscreenIframeProps}
+        className="movie-player-frame absolute inset-0 h-full w-full"
+      />
+    </div>
+  );
+}
 
 export default function MovieDetailsPage() {
   const params = useParams<{ id: string }>();
@@ -107,14 +133,11 @@ export default function MovieDetailsPage() {
               {currentMovie.title}
             </h1>
 
-            <div className="mt-5 overflow-hidden rounded-[8px] bg-[#07020b] shadow-[0_20px_54px_rgba(0,0,0,0.48)] ring-1 ring-white/14 sm:hidden">
-              <iframe
-                src={watchUrl}
-                title={currentMovie.title}
-                {...fullscreenIframeProps}
-                className="aspect-video w-full min-h-[210px]"
-              />
-            </div>
+            <PlayerFrame
+              src={watchUrl}
+              title={currentMovie.title}
+              className="mt-5 min-h-[210px] rounded-[8px] shadow-[0_20px_54px_rgba(0,0,0,0.48)] ring-1 ring-white/14 sm:hidden"
+            />
 
             <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
               <span className="flex items-center gap-2 rounded-[7px] bg-white/10 px-3 py-1.5">
@@ -161,7 +184,7 @@ export default function MovieDetailsPage() {
             <h2 className="font-script text-[32px] font-semibold text-[#ff75bd] sm:text-[34px]">
               Details
             </h2>
-            <dl className="mt-5 grid gap-4 text-[14px] text-white/92 sm:mt-6 sm:gap-5 sm:text-[16px]">
+            <dl className="mt-2 grid gap-4 text-[14px] text-white/92 sm:mt-6 sm:gap-5 sm:text-[16px]">
               <div className="grid grid-cols-[86px_1fr] gap-4 sm:grid-cols-[100px_1fr] sm:gap-5">
                 <dt className="text-white/72">Director</dt>
                 <dd>{currentMovie.director}</dd>
@@ -227,15 +250,13 @@ export default function MovieDetailsPage() {
             >
               <X className="h-5 w-5" />
             </button>
-            <iframe
+            <PlayerFrame
               src={isTrailerOpen ? currentMovie.trailer_url : watchUrl}
               title={
                 isTrailerOpen
                   ? `${currentMovie.title} trailer`
                   : currentMovie.title
               }
-              {...fullscreenIframeProps}
-              className="aspect-video w-full"
             />
           </div>
         </div>
