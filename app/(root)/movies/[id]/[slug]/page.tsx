@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Film, Play, Sparkles, Star, X } from "lucide-react";
+import { ArrowLeft, Film, Play, Server, Sparkles, Star, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -29,24 +29,47 @@ function releaseDate(year: number) {
   return String(year);
 }
 
-// function playerUrl(id: string) {
-//   const match = /^(movie|tv)-(\d+)$/.exec(id);
+type PlayerServer = "vidking" | "videasy";
 
-//   if (match) {
-//     return `https://player.videasy.net/${match[1]}/${match[2]}?overlay=true&color=EC4899`;
-//   }
+const playerServers: { id: PlayerServer; label: string }[] = [
+  { id: "vidking", label: "Server 1" },
+  { id: "videasy", label: "Server 2" },
+];
 
-//   return `https://player.videasy.net/movie/${id}?overlay=true&color=EC4899`;
-// }
-
-function playerUrl(id: string) {
+function getMediaId(id: string) {
   const match = /^(movie|tv)-(\d+)$/.exec(id);
 
-  if (match) {
-    return `https://www.vidking.net/embed/${match[1]}/${match[2]}`;
+  if (match) return { type: match[1] as "movie" | "tv", id: match[2] };
+  if (/^\d+$/.test(id)) return { type: "movie" as const, id };
+
+  return null;
+}
+
+function playerUrl({
+  server,
+  id,
+  season,
+  episode,
+}: {
+  server: PlayerServer;
+  id: string;
+  season: number;
+  episode: number;
+}) {
+  const media = getMediaId(id);
+  if (!media) return "";
+
+  const base =
+    server === "vidking"
+      ? "https://www.vidking.net/embed"
+      : "https://player.videasy.net";
+  const theme = server === "videasy" ? "?overlay=true&color=EC4899" : "";
+
+  if (media.type === "tv") {
+    return `${base}/tv/${media.id}/${season}/${episode}${theme}`;
   }
 
-  return `https://www.vidking.net/embed/movie/${id}`;
+  return `${base}/movie/${media.id}${theme}`;
 }
 
 const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
@@ -92,6 +115,9 @@ export default function MovieDetailsPage() {
   const suggestions = useMovieSuggestions(params.id);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+  const [selectedServer, setSelectedServer] = useState<PlayerServer>("vidking");
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedEpisode, setSelectedEpisode] = useState(1);
 
   if (movie.isLoading || suggestions.isLoading)
     return <MovieDetailsLoadingSkeleton />;
@@ -106,10 +132,27 @@ export default function MovieDetailsPage() {
 
   const currentMovie = movie.data;
   const suggestedMovies = (suggestions.data ?? []).slice(0, 5);
-  const watchUrl =
-    /^(movie|tv)-\d+$/.test(currentMovie.id) || /^\d+$/.test(currentMovie.id)
-      ? playerUrl(currentMovie.id)
-      : currentMovie.trailer_url;
+  const media = getMediaId(currentMovie.id);
+  const isTvShow = media?.type === "tv";
+  const seasons = currentMovie.seasons ?? [];
+  const activeSeason =
+    seasons.find((season) => season.season_number === selectedSeason) ??
+    seasons.find((season) => season.season_number === 1) ??
+    seasons[0];
+  const episodeCount = activeSeason?.episode_count ?? 1;
+  const activeSeasonNumber = activeSeason?.season_number ?? selectedSeason;
+  const activeEpisode = Math.min(selectedEpisode, episodeCount);
+  const watchUrl = media
+    ? playerUrl({
+        server: selectedServer,
+        id: currentMovie.id,
+        season: activeSeasonNumber,
+        episode: activeEpisode,
+      })
+    : currentMovie.trailer_url;
+  const playerTitle = isTvShow
+    ? `${currentMovie.title} S${activeSeasonNumber} E${activeEpisode}`
+    : currentMovie.title;
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07020b] text-white">
@@ -145,7 +188,7 @@ export default function MovieDetailsPage() {
 
             <iframe
               src={watchUrl}
-              title={currentMovie.title}
+              title={playerTitle}
               width="100%"
               height="100%"
               allowFullScreen
@@ -153,12 +196,87 @@ export default function MovieDetailsPage() {
               className="lg:hidden mt-6 aspect-video w-full rounded-[7px] bg-black shadow-[0_18px_38px_rgba(0,0,0,0.32)] "
             ></iframe>
 
+            {media ? (
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="flex h-10 items-center gap-2 rounded-[7px] bg-black/36 px-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-white/72 ring-1 ring-white/12">
+                  <Server className="h-4 w-4" />
+                  Server
+                </span>
+                {playerServers.map((server) => (
+                  <button
+                    key={server.id}
+                    type="button"
+                    onClick={() => setSelectedServer(server.id)}
+                    className={cn(
+                      "h-10 cursor-pointer rounded-[7px] px-4 text-[14px] font-semibold transition ring-1",
+                      selectedServer === server.id
+                        ? "bg-[#ee3e9f] text-white ring-[#ff75bd]/70"
+                        : "bg-white/10 text-white/82 ring-white/14 hover:bg-white/16",
+                    )}
+                  >
+                    {server.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            {isTvShow && seasons.length ? (
+              <div className="mt-4 grid gap-4 rounded-[7px] bg-black/28 p-3 ring-1 ring-white/10 backdrop-blur-md sm:p-4 lg:max-w-[860px]">
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {seasons.map((season) => (
+                    <button
+                      key={season.season_number}
+                      type="button"
+                      onClick={() => {
+                        setSelectedSeason(season.season_number);
+                        setSelectedEpisode(1);
+                      }}
+                      className={cn(
+                        "h-10 shrink-0 cursor-pointer rounded-[7px] px-4 text-[14px] font-semibold transition ring-1",
+                        activeSeasonNumber === season.season_number
+                          ? "bg-white text-[#ee3e9f] ring-white"
+                          : "bg-white/10 text-white/82 ring-white/14 hover:bg-white/16",
+                      )}
+                    >
+                      {season.name || `Season ${season.season_number}`}
+                    </button>
+                  ))}
+                </div>
+                <div className="grid max-h-[176px] grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-2 overflow-y-auto pr-1 sm:grid-cols-[repeat(auto-fill,minmax(58px,1fr))]">
+                  {Array.from(
+                    { length: episodeCount },
+                    (_, index) => index + 1,
+                  ).map((episode) => (
+                    <button
+                      key={`${activeSeasonNumber}-${episode}`}
+                      type="button"
+                      onClick={() => setSelectedEpisode(episode)}
+                      className={cn(
+                        "h-10 cursor-pointer rounded-[7px] text-[14px] font-semibold transition ring-1",
+                        activeEpisode === episode
+                          ? "bg-[#ee3e9f] text-white ring-[#ff75bd]/70"
+                          : "bg-white/10 text-white/82 ring-white/14 hover:bg-white/16",
+                      )}
+                      aria-label={`Episode ${episode}`}
+                    >
+                      E{episode}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
               <span className="flex items-center gap-2 rounded-[7px] bg-white/10 px-3 py-1.5">
                 <Star className="h-5 w-5 fill-[#facc15] text-[#facc15]" />
                 {currentMovie.rating.toFixed(1)}
               </span>
               <span>{currentMovie.year || "TBA"}</span>
+              {isTvShow ? (
+                <span className="rounded-[5px] border border-white/34 px-2.5 py-1 text-[16px]">
+                  S{activeSeasonNumber} E{activeEpisode}
+                </span>
+              ) : null}
               <span className="rounded-[5px] border border-white/34 px-2.5 py-1 text-[16px]">
                 {currentMovie.age_rating}
               </span>
@@ -267,9 +385,7 @@ export default function MovieDetailsPage() {
             <PlayerFrame
               src={isTrailerOpen ? currentMovie.trailer_url : watchUrl}
               title={
-                isTrailerOpen
-                  ? `${currentMovie.title} trailer`
-                  : currentMovie.title
+                isTrailerOpen ? `${currentMovie.title} trailer` : playerTitle
               }
             />
           </div>

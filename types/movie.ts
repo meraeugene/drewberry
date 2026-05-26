@@ -17,4 +17,9 @@ export type Movie = {
   subtitles: string[];
   created_at: string;
   collectionIds: string[];
+  seasons?: {
+    season_number: number;
+    name: string;
+    episode_count: number;
+  }[];
 };

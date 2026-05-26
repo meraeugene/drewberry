@@ -18,6 +18,11 @@ type TmdbMovieDetails = {
   genres: { id: number; name: string }[];
   original_language: string;
   adult: boolean;
+  seasons?: {
+    season_number: number;
+    name: string;
+    episode_count: number;
+  }[];
 };
 
 type TmdbMovieSummary = {
@@ -171,6 +176,16 @@ async function fetchTmdbMovie(id: string): Promise<Movie | null> {
     subtitles: ["English"],
     created_at: new Date().toISOString(),
     collectionIds: [],
+    seasons:
+      parsed.media === "tv"
+        ? (movie.seasons ?? [])
+            .filter((season) => season.episode_count > 0)
+            .map((season) => ({
+              season_number: season.season_number,
+              name: season.name,
+              episode_count: season.episode_count,
+            }))
+        : undefined,
   };
 }
 
