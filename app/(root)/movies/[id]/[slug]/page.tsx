@@ -133,11 +133,14 @@ export default function MovieDetailsPage() {
               {currentMovie.title}
             </h1>
 
-            <PlayerFrame
-              src={watchUrl}
-              title={currentMovie.title}
-              className="mt-5 min-h-[210px] rounded-[8px] shadow-[0_20px_54px_rgba(0,0,0,0.48)] ring-1 ring-white/14 sm:hidden"
-            />
+            <iframe
+              src="https://player.videasy.net/movie/299534"
+              width="100%"
+              height="100%"
+              allowFullScreen
+              allow="encrypted-media"
+              className="lg:hidden"
+            ></iframe>
 
             <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
               <span className="flex items-center gap-2 rounded-[7px] bg-white/10 px-3 py-1.5">
