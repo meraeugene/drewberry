@@ -18,6 +18,7 @@ type TmdbMovieDetails = {
   genres: { id: number; name: string }[];
   original_language: string;
   adult: boolean;
+  created_by?: { name: string }[];
   seasons?: {
     season_number: number;
     name: string;
@@ -135,7 +136,11 @@ async function fetchTmdbMovie(id: string): Promise<Movie | null> {
     ? ((await videosResponse.json()) as TmdbVideos)
     : { results: [] };
   const director =
-    credits.crew.find((member) => member.job === "Director")?.name ?? "Unknown";
+    parsed.media === "tv"
+      ? (movie.created_by?.map((creator) => creator.name).join(", ") ??
+        credits.crew.find((member) => member.job === "Director")?.name ??
+        "")
+      : (credits.crew.find((member) => member.job === "Director")?.name ?? "");
   const trailer =
     videos.results.find(
       (video) =>

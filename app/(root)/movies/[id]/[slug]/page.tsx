@@ -13,7 +13,7 @@ import { useMovieSuggestions } from "@/hooks/useMovieSuggestions";
 import { cn, moviePath } from "@/lib/utils";
 
 function formatDuration(minutes: number) {
-  if (!minutes) return "Runtime TBA";
+  if (!minutes) return null;
 
   const hours = Math.floor(minutes / 60);
   const remaining = minutes % 60;
@@ -32,8 +32,8 @@ function releaseDate(year: number) {
 type PlayerServer = "vidking" | "videasy" | "vidsrc";
 
 const playerServers: { id: PlayerServer; label: string }[] = [
-  { id: "vidking", label: "Server 1" },
-  { id: "videasy", label: "Server 2" },
+  { id: "videasy", label: "Server 1" },
+  { id: "vidking", label: "Server 2" },
   { id: "vidsrc", label: "Server 3" },
 ];
 
@@ -62,23 +62,6 @@ function playerUrl({
   const media = getMediaId(id);
   if (!media) return "";
 
-  // VIDKING
-  if (server === "vidking") {
-    const params = new URLSearchParams({
-      color: "EC4899",
-      autoPlay: String(autoPlay),
-    });
-
-    if (media.type === "tv") {
-      params.set("nextEpisode", "true");
-      params.set("episodeSelector", "true");
-
-      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
-    }
-
-    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
-  }
-
   // VIDEASY
   if (server === "videasy") {
     const params = new URLSearchParams({
@@ -96,6 +79,23 @@ function playerUrl({
     }
 
     return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
+  }
+
+  // VIDKING
+  if (server === "vidking") {
+    const params = new URLSearchParams({
+      color: "EC4899",
+      autoPlay: String(autoPlay),
+    });
+
+    if (media.type === "tv") {
+      params.set("nextEpisode", "true");
+      params.set("episodeSelector", "true");
+
+      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+    }
+
+    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
   }
 
   // VIDSRC
@@ -168,7 +168,7 @@ export default function MovieDetailsPage() {
   const suggestions = useMovieSuggestions(params.id);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<PlayerServer>("vidking");
+  const [selectedServer, setSelectedServer] = useState<PlayerServer>("videasy");
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const isDesktopViewport = useMediaQuery("(min-width: 1024px)");
@@ -237,10 +237,10 @@ export default function MovieDetailsPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="mb-5 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-black/36 text-white shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-white/12 backdrop-blur-md transition hover:bg-[#ee3e9f] hover:text-white hover:ring-[#ff75bd]/60"
+              className="mb-5 grid  cursor-pointer place-items-center   text-white  "
               aria-label="Go back"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-6 w-6" />
             </button>
             <p className="font-script text-[34px] font-semibold tracking-wide text-[#ff75bd] sm:text-[44px]">
               Featured
@@ -263,18 +263,14 @@ export default function MovieDetailsPage() {
             ) : null}
 
             {media ? (
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="flex h-10 items-center gap-2 rounded-[7px] bg-black/36 px-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-white/72 ring-1 ring-white/12">
-                  <Server className="h-4 w-4" />
-                  Server
-                </span>
+              <div className="mt-4 flex max-w-full flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {playerServers.map((server) => (
                   <button
                     key={server.id}
                     type="button"
                     onClick={() => setSelectedServer(server.id)}
                     className={cn(
-                      "h-10 cursor-pointer rounded-[7px] px-4 text-[14px] font-semibold transition ring-1",
+                      "h-10 shrink-0 cursor-pointer rounded-[7px] px-4 text-[14px] font-semibold transition ring-1",
                       selectedServer === server.id
                         ? "bg-[#ee3e9f] text-white ring-[#ff75bd]/70"
                         : "bg-white/10 text-white/82 ring-white/14 hover:bg-white/16",
@@ -332,7 +328,10 @@ export default function MovieDetailsPage() {
               </div>
             ) : null}
 
-            <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
+            <div
+              className="mt-5 flex flex-nowrap overflow-x-auto
+             scrollbar-none  max-w-full  items-center   pb-1  [&::-webkit-scrollbar]:hidden  gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7"
+            >
               <span className="flex items-center gap-2 rounded-[7px] bg-white/10 px-3 py-1.5">
                 <Star className="h-5 w-5 fill-[#facc15] text-[#facc15]" />
                 {currentMovie.rating.toFixed(1)}

@@ -19,7 +19,7 @@ export function MovieDetailsLoadingSkeleton() {
       <div className="absolute inset-0 animate-pulse bg-[linear-gradient(90deg,#07020b_0%,rgba(7,2,11,0.96)_24%,rgba(20,6,34,0.62)_54%,rgba(7,2,11,0.06)_100%),linear-gradient(180deg,rgba(7,2,11,0.16)_0%,rgba(7,2,11,0.5)_58%,#07020b_100%)]" />
       <div className="relative z-10">
         <section className="px-4 pb-8 pt-24 sm:px-6 sm:pb-10 sm:pt-32 lg:px-9 lg:pb-12">
-          <div className="mb-5 h-10 w-10 animate-pulse rounded-full bg-black/36 ring-1 ring-white/12" />
+          <div className="mb-5 h-7 w-7 animate-pulse bg-white rounded-sm " />
           <div className="h-9 w-28 animate-pulse rounded bg-[#ff75bd]/30 sm:h-11 sm:w-32" />
           <div className="mt-4 h-10 w-[min(680px,84vw)] animate-pulse rounded bg-white/10 sm:mt-5 sm:h-16 lg:w-[min(900px,84vw)]" />
 
