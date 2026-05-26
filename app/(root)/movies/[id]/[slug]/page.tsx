@@ -29,14 +29,24 @@ function releaseDate(year: number) {
   return String(year);
 }
 
+// function playerUrl(id: string) {
+//   const match = /^(movie|tv)-(\d+)$/.exec(id);
+
+//   if (match) {
+//     return `https://player.videasy.net/${match[1]}/${match[2]}?overlay=true&color=EC4899`;
+//   }
+
+//   return `https://player.videasy.net/movie/${id}?overlay=true&color=EC4899`;
+// }
+
 function playerUrl(id: string) {
   const match = /^(movie|tv)-(\d+)$/.exec(id);
 
   if (match) {
-    return `https://player.videasy.net/${match[1]}/${match[2]}?overlay=true&color=EC4899`;
+    return `https://www.vidking.net/embed/${match[1]}/${match[2]}`;
   }
 
-  return `https://player.videasy.net/movie/${id}?overlay=true&color=EC4899`;
+  return `https://www.vidking.net/embed/movie/${id}`;
 }
 
 const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
