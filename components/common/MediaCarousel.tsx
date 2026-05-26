@@ -155,7 +155,7 @@ export function MediaCarousel({
   return (
     <div className="relative -mx-4 overflow-visible pb-1 pl-4 pt-4 sm:-mx-6 sm:pl-6 lg:-mx-9 lg:pl-9">
       {pageCount > 1 ? (
-        <div className="absolute right-4 top-0 z-20 flex gap-1 sm:right-6 lg:right-9">
+        <div className="absolute right-4 top-0 z-20 hidden gap-1 sm:right-6 sm:flex lg:right-9">
           {Array.from({ length: pageCount }).map((_, index) => (
             <span
               key={index}
@@ -186,7 +186,7 @@ export function MediaCarousel({
           type="button"
           aria-label="Show previous"
           onClick={previous}
-          className="absolute left-0 top-4 z-40 grid h-[calc(100%-18px)] w-11 cursor-pointer place-items-center bg-gradient-to-r from-[#12030a]/96 via-[#12030a]/64 to-transparent transition hover:text-[#ff75bd] sm:w-16 lg:w-20"
+          className="absolute left-0 top-4 z-40 hidden h-[calc(100%-18px)] w-11 cursor-pointer place-items-center bg-gradient-to-r from-[#12030a]/96 via-[#12030a]/64 to-transparent transition hover:text-[#ff75bd] sm:grid sm:w-16 lg:w-20"
         >
           <span className="grid h-16 w-10 rotate-180 place-items-center text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.95)] sm:h-20 sm:w-12">
             <ChevronRight className="h-8 w-8 stroke-[3.25] sm:h-11 sm:w-11 lg:h-12 lg:w-12" />
@@ -198,7 +198,7 @@ export function MediaCarousel({
           type="button"
           aria-label="Show more"
           onClick={next}
-          className="absolute right-0 top-4 z-40 grid h-[calc(100%-18px)] w-11 cursor-pointer place-items-center bg-gradient-to-l from-[#12030a]/96 via-[#12030a]/64 to-transparent transition hover:text-[#ff75bd] sm:w-16 lg:w-20"
+          className="absolute right-0 top-4 z-40 hidden h-[calc(100%-18px)] w-11 cursor-pointer place-items-center bg-gradient-to-l from-[#12030a]/96 via-[#12030a]/64 to-transparent transition hover:text-[#ff75bd] sm:grid sm:w-16 lg:w-20"
         >
           <span className="grid h-16 w-10 place-items-center text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.95)] sm:h-20 sm:w-12">
             <ChevronRight className="h-8 w-8 stroke-[3.25] sm:h-11 sm:w-11 lg:h-12 lg:w-12" />

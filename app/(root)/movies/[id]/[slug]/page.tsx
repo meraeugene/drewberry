@@ -4,7 +4,7 @@ import { ArrowLeft, Film, Play, Sparkles, Star, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { type IframeHTMLAttributes, useState } from "react";
 import { MediaCarousel } from "@/components/common/MediaCarousel";
 import { ErrorState } from "@/components/common/ErrorState";
 import { MovieDetailsLoadingSkeleton } from "@/components/skeletons/MovieDetailsLoadingSkeleton";
@@ -39,6 +39,16 @@ function playerUrl(id: string) {
   return `https://player.videasy.net/movie/${id}?overlay=true&color=EC4899`;
 }
 
+const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
+  webkitallowfullscreen: string;
+  mozallowfullscreen: string;
+} = {
+  allow: "autoplay; fullscreen *; encrypted-media; picture-in-picture",
+  allowFullScreen: true,
+  webkitallowfullscreen: "true",
+  mozallowfullscreen: "true",
+};
+
 export default function MovieDetailsPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
@@ -66,7 +76,7 @@ export default function MovieDetailsPage() {
       : currentMovie.trailer_url;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#07020b] text-white">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#07020b] text-white">
       <Image
         src={currentMovie.banner_url}
         alt=""
@@ -101,8 +111,7 @@ export default function MovieDetailsPage() {
               <iframe
                 src={watchUrl}
                 title={currentMovie.title}
-                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                allowFullScreen
+                {...fullscreenIframeProps}
                 className="aspect-video w-full min-h-[210px]"
               />
             </div>
@@ -189,7 +198,7 @@ export default function MovieDetailsPage() {
                 <Link
                   key={item.id}
                   href={moviePath(item.id, item.title)}
-                  className="poster-float-card group relative aspect-[2/3] h-[210px] min-w-[140px] cursor-pointer overflow-hidden rounded-[7px] bg-[#240414] shadow-[0_18px_38px_rgba(0,0,0,0.32)] ring-1 ring-[#f472b6]/20 hover:ring-[#ff75bd]/70 sm:h-[300px] sm:min-w-[200px] lg:h-[330px] lg:min-w-[220px]"
+                  className="poster-float-card group relative aspect-[2/3] h-[210px] min-w-[140px] cursor-pointer overflow-hidden rounded-[7px] bg-[#240414] shadow-[0_18px_38px_rgba(0,0,0,0.32)]  sm:h-[300px] sm:min-w-[200px] lg:h-[330px] lg:min-w-[220px]"
                 >
                   <Image
                     src={item.poster_url}
@@ -225,8 +234,7 @@ export default function MovieDetailsPage() {
                   ? `${currentMovie.title} trailer`
                   : currentMovie.title
               }
-              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-              allowFullScreen
+              {...fullscreenIframeProps}
               className="aspect-video w-full"
             />
           </div>
