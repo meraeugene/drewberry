@@ -140,7 +140,7 @@ export default function MovieDetailsPage() {
               height="100%"
               allowFullScreen
               allow="encrypted-media"
-              className="sm:hidden mt-6 w-full rounded-[7px] "
+              className="sm:hidden mt-6 aspect-video  rounded-[7px] "
             ></iframe>
 
             <div className="mt-5 flex flex-wrap items-center gap-2 text-[14px] text-white/90 sm:mt-6 sm:gap-5 sm:text-[20px] lg:mt-7">
