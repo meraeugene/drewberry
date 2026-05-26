@@ -59,17 +59,39 @@ function playerUrl({
   const media = getMediaId(id);
   if (!media) return "";
 
-  const base =
-    server === "vidking"
-      ? "https://www.vidking.net/embed"
-      : "https://player.videasy.net";
-  const theme = server === "videasy" ? "?overlay=true&color=EC4899" : "";
+  // VIDKING
+  if (server === "vidking") {
+    const params = new URLSearchParams({
+      color: "EC4899",
+      autoPlay: "true",
+    });
 
-  if (media.type === "tv") {
-    return `${base}/tv/${media.id}/${season}/${episode}${theme}`;
+    if (media.type === "tv") {
+      params.set("nextEpisode", "true");
+      params.set("episodeSelector", "true");
+
+      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+    }
+
+    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
   }
 
-  return `${base}/movie/${media.id}${theme}`;
+  // VIDEASY
+  const params = new URLSearchParams({
+    overlay: "true",
+    color: "EC4899",
+    autoPlay: "true",
+  });
+
+  if (media.type === "tv") {
+    params.set("nextEpisode", "true");
+    params.set("episodeSelector", "true");
+    params.set("autoplayNextEpisode", "true");
+
+    return `https://player.videasy.net/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+  }
+
+  return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
 }
 
 const fullscreenIframeProps: IframeHTMLAttributes<HTMLIFrameElement> & {
