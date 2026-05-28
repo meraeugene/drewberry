@@ -172,7 +172,7 @@ export default function MovieDetailsPage() {
   const suggestions = useMovieSuggestions(params.id);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<PlayerServer>("videasy");
+  const [selectedServer, setSelectedServer] = useState<PlayerServer>("vidsrc");
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const isDesktopViewport = useMediaQuery("(min-width: 1024px)");
