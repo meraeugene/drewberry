@@ -29,14 +29,6 @@ function releaseDate(year: number) {
   return String(year);
 }
 
-type PlayerServer = "vidking" | "videasy" | "vidsrc";
-
-const playerServers: { id: PlayerServer; label: string }[] = [
-  { id: "videasy", label: "Server 1" },
-  { id: "vidking", label: "Server 2" },
-  { id: "vidsrc", label: "Server 3" },
-];
-
 function getMediaId(id: string) {
   const match = /^(movie|tv)-(\d+)$/.exec(id);
 
@@ -45,6 +37,14 @@ function getMediaId(id: string) {
 
   return null;
 }
+
+type PlayerServer = "vidsrc" | "vidking" | "videasy";
+
+const playerServers: { id: PlayerServer; label: string }[] = [
+  { id: "vidsrc", label: "Server 1" },
+  { id: "vidking", label: "Server 2" },
+  { id: "videasy", label: "Server 3" },
+];
 
 function playerUrl({
   server,
