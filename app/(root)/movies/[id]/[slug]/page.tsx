@@ -62,7 +62,33 @@ function playerUrl({
   const media = getMediaId(id);
   if (!media) return "";
 
-  // VIDEASY
+  // VIDSRC (FIRST PRIORITY)
+  if (server === "vidsrc") {
+    if (media.type === "tv") {
+      return `https://vidsrc-embed.ru/embed/tv/${media.id}/${season}/${episode}`;
+    }
+
+    return `https://vidsrc-embed.ru/embed/movie/${media.id}`;
+  }
+
+  // VIDKING (SECOND PRIORITY)
+  if (server === "vidking") {
+    const params = new URLSearchParams({
+      color: "EC4899",
+      autoPlay: String(autoPlay),
+    });
+
+    if (media.type === "tv") {
+      params.set("nextEpisode", "true");
+      params.set("episodeSelector", "true");
+
+      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
+    }
+
+    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
+  }
+
+  // VIDEASY (THIRD PRIORITY)
   if (server === "videasy") {
     const params = new URLSearchParams({
       overlay: "true",
@@ -81,29 +107,7 @@ function playerUrl({
     return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
   }
 
-  // VIDKING
-  if (server === "vidking") {
-    const params = new URLSearchParams({
-      color: "EC4899",
-      autoPlay: String(autoPlay),
-    });
-
-    if (media.type === "tv") {
-      params.set("nextEpisode", "true");
-      params.set("episodeSelector", "true");
-
-      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
-    }
-
-    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
-  }
-
-  // VIDSRC
-  if (media.type === "tv") {
-    return `https://vidsrc-embed.ru/embed/tv/${media.id}/${season}/${episode}`;
-  }
-
-  return `https://vidsrc-embed.ru/embed/movie/${media.id}`;
+  return "";
 }
 
 function useMediaQuery(query: string) {
