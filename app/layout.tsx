@@ -25,8 +25,7 @@ export const metadata: Metadata = {
     default: "drewberry",
     template: "%s | drewberry",
   },
-  description:
-    "drewberry is a dark pink movie streaming experience for dreamy favorites, romcoms, fantasy worlds, and comfort-watch classics.",
+  description: "drewberry movie website",
   applicationName: "drewberry",
   keywords: [
     "drewberry",
@@ -41,8 +40,7 @@ export const metadata: Metadata = {
   publisher: "drewberry",
   openGraph: {
     title: "drewberry",
-    description:
-      "A dark pink movie streaming experience for dreamy favorites, romcoms, fantasy worlds, and comfort-watch classics.",
+    description: "drewberry movie website",
     siteName: "drewberry",
     type: "website",
     images: [
@@ -57,8 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "drewberry",
-    description:
-      "A dark pink movie streaming experience for dreamy favorites and comfort-watch classics.",
+    description: "drewberry movie website",
     images: ["/pinkb.png"],
   },
   icons: {
