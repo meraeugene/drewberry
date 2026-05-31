@@ -23,7 +23,7 @@ export function MovieDetailsLoadingSkeleton() {
           <div className="h-9 w-28 animate-pulse rounded bg-[#ff75bd]/30 sm:h-11 sm:w-32" />
           <div className="mt-4 h-10 w-[min(680px,84vw)] animate-pulse rounded bg-white/10 sm:mt-5 sm:h-16 lg:w-[min(900px,84vw)]" />
 
-          <div className="poster-skeleton-card mt-5 aspect-video w-full min-h-[210px] rounded-[8px] ring-1 ring-white/14 sm:hidden" />
+          <div className="poster-skeleton-card mt-5 aspect-video w-full min-h-[210px] rounded-[8px]  sm:hidden" />
 
           <div className="mt-5 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-5">
             {Array.from({ length: 5 }).map((_, index) => (

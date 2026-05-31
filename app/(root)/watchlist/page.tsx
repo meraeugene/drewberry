@@ -29,11 +29,11 @@ export default function WatchlistPage() {
   const movies = useWatchlistStore((state) => state.movies);
 
   return (
-    <main className="min-h-screen bg-[#07020b] px-4 pb-14 pt-28 text-white sm:px-6 sm:pt-32 lg:px-9">
+    <main className="min-h-screen bg-[#07020b] px-4 pb-14 pt-24 text-white sm:px-6 sm:pt-32 lg:px-9">
       <section>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-script text-[34px] font-semibold leading-none text-[#ff75bd] sm:text-[46px]">
+            <p className="font-script text-[28px] font-semibold leading-none text-[#ff75bd] sm:text-[46px]">
               My Watchlist
             </p>
           </div>

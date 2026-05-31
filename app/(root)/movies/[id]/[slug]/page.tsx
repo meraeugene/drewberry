@@ -385,10 +385,10 @@ export default function MovieDetailsPage() {
                   saved ? remove(currentMovie.id) : add(currentMovie)
                 }
                 className={cn(
-                  "flex h-[50px] cursor-pointer items-center gap-3 rounded-[7px] px-6 text-[17px] font-semibold text-white shadow-[0_18px_38px_rgba(0,0,0,0.22)] transition sm:h-[58px] sm:gap-4 sm:px-8 sm:text-[22px]",
+                  "flex h-[50px] cursor-pointer items-center gap-3 rounded-[7px] px-6 text-[17px] font-semibold shadow-[0_18px_38px_rgba(0,0,0,0.22)] transition sm:h-[58px] sm:gap-4 sm:px-8 sm:text-[22px]",
                   saved
-                    ? "bg-[#8f1d58] ring-1 ring-[#ff75bd]/40 hover:bg-[#701142]"
-                    : "bg-[#ee3e9f] hover:bg-[#c81979]",
+                    ? "bg-[#ffd1e8] text-[#7a1749] ring-1 ring-white/30 hover:bg-[#ffc0df]"
+                    : "bg-[#ff8bcb] text-[#3a071d] hover:bg-[#ffa4d6]",
                 )}
                 aria-label={
                   saved ? "Remove from watchlist" : "Add to watchlist"

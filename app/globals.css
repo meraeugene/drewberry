@@ -68,6 +68,19 @@ span {
   background: linear-gradient(180deg, #ff9bd1, #ff5fb6);
 }
 
+@media (max-width: 1024px) {
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+}
+
 .font-body {
   font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
 }
