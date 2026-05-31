@@ -57,8 +57,8 @@ export default function WatchlistPage() {
                 No saved movies yet
               </h2>
               <p className="mt-2 text-sm leading-6 text-white/70">
-                Tap the heart on any movie card or movie page to save it here on
-                this browser.
+                Tap the add to watchlist button on any movie to save it here and
+                easily find it later.
               </p>
               <Link
                 href="/home"

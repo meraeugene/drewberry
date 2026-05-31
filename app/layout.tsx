@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://drewberry.local"),
+  metadataBase: new URL("https://drewberry.vercel.app/"),
   title: {
     default: "drewberry",
     template: "%s | drewberry",
