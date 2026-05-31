@@ -44,6 +44,30 @@ span {
   color: white;
 }
 
+* {
+  scrollbar-color: #ff5fb6 #17030d;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #17030d;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #17030d;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ff75bd, #ee3e9f);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff9bd1, #ff5fb6);
+}
+
 .font-body {
   font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
 }
@@ -56,11 +80,20 @@ span {
   isolation: isolate;
   overflow: hidden;
   border-radius: var(--poster-radius, 7px);
-  transition: border-color 260ms ease;
+  transform-style: preserve-3d;
+  transition:
+    border-color 260ms ease,
+    box-shadow 320ms ease,
+    transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
 }
 
 .poster-float-card:hover {
   z-index: 30;
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.32),
+    0 0 22px rgba(255, 117, 189, 0.18);
 }
 
 .poster-float-card::after {
@@ -89,10 +122,17 @@ span {
 
 .poster-float-media {
   border-radius: inherit;
+  transform: translateZ(0);
+  transition: transform 420ms ease, filter 320ms ease;
 }
 
 .poster-float-card img {
   border-radius: inherit;
+}
+
+.poster-float-card:hover .poster-float-media {
+  transform: scale(1.02);
+  filter: saturate(1.06);
 }
 
 .poster-skeleton-card {

@@ -41,9 +41,9 @@ export function MovieCard({ movie }: { movie: Movie }) {
             </p>
           </div>
           <button
-            onClick={() => (saved ? remove(movie.id) : add(movie.id))}
+            onClick={() => (saved ? remove(movie.id) : add(movie))}
             aria-label={saved ? "Remove from My List" : "Add to My List"}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pink-100 text-pink-600 dark:bg-pink-400/20 dark:text-pink-100"
+            className="grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-full bg-pink-100 text-pink-600 dark:bg-pink-400/20 dark:text-pink-100"
           >
             <Heart className={saved ? "h-4 w-4 fill-current" : "h-4 w-4"} />
           </button>

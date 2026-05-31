@@ -38,6 +38,7 @@ type TmdbMovieSummary = {
   backdrop_path: string | null;
   adult: boolean;
   genre_ids?: number[];
+  media_type?: "movie" | "tv" | string;
 };
 
 type TmdbMovieListResponse = {
@@ -197,9 +198,13 @@ async function fetchTmdbMovie(id: string): Promise<Movie | null> {
 function mapTmdbSummary(movie: TmdbMovieSummary, media: "movie" | "tv" = "movie"): Movie {
   const title = movie.title ?? movie.name ?? "Untitled";
   const date = movie.release_date ?? movie.first_air_date ?? "";
+  const resultMedia =
+    movie.media_type === "tv" || movie.media_type === "movie"
+      ? movie.media_type
+      : media;
 
   return {
-    id: `${media}-${movie.id}`,
+    id: `${resultMedia}-${movie.id}`,
     title,
     description: movie.overview || "No overview is available yet.",
     year: date ? Number(date.slice(0, 4)) : 0,
@@ -237,6 +242,35 @@ async function fetchTmdbMovieList(url: URL, media: "movie" | "tv" = "movie") {
   return data.results
     .filter((movie) => movie.poster_path)
     .map((movie) => mapTmdbSummary(movie, media));
+}
+
+async function searchTmdbMovies(query: string) {
+  if (!process.env.TMDB_ACCESS_TOKEN && !process.env.TMDB_API_KEY) {
+    return [];
+  }
+
+  const url = withApiKey(new URL("https://api.themoviedb.org/3/search/multi"));
+  url.searchParams.set("query", query);
+  url.searchParams.set("include_adult", "false");
+  url.searchParams.set("language", "en-US");
+  url.searchParams.set("page", "1");
+
+  const response = await fetch(url, {
+    headers: getTmdbHeaders(),
+    next: { revalidate: 60 * 30 },
+  });
+
+  if (!response.ok) return [];
+
+  const data = (await response.json()) as TmdbMovieListResponse;
+
+  return data.results
+    .filter(
+      (movie) =>
+        movie.poster_path &&
+        (movie.media_type === "movie" || movie.media_type === "tv"),
+    )
+    .map((movie) => mapTmdbSummary(movie));
 }
 
 export async function getMovieSuggestions(id: string) {
@@ -290,11 +324,17 @@ export async function getMovieSuggestions(id: string) {
 export async function getMovies(query?: string) {
   if (!query) return movies;
   const needle = query.toLowerCase();
-  return movies.filter((movie) =>
+  const localMatches = movies.filter((movie) =>
     [movie.title, movie.description, movie.director, ...movie.genre]
       .join(" ")
       .toLowerCase()
       .includes(needle),
+  );
+  const tmdbMatches = await searchTmdbMovies(query);
+
+  return [...localMatches, ...tmdbMatches].filter(
+    (movie, index, list) =>
+      list.findIndex((item) => item.id === movie.id) === index,
   );
 }
 

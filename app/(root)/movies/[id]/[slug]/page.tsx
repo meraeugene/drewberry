@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Film, Play, Server, Sparkles, Star, X } from "lucide-react";
+import { ArrowLeft, Film, Heart, Play, Sparkles, Star, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import { MovieDetailsLoadingSkeleton } from "@/components/skeletons/MovieDetails
 import { useMovie } from "@/hooks/useMovie";
 import { useMovieSuggestions } from "@/hooks/useMovieSuggestions";
 import { cn, moviePath } from "@/lib/utils";
+import { useWatchlistStore } from "@/store/watchlistStore";
 
 function formatDuration(minutes: number) {
   if (!minutes) return null;
@@ -176,6 +177,7 @@ export default function MovieDetailsPage() {
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const isDesktopViewport = useMediaQuery("(min-width: 1024px)");
+  const { add, remove, has } = useWatchlistStore();
 
   if (movie.isLoading || suggestions.isLoading)
     return <MovieDetailsLoadingSkeleton />;
@@ -189,6 +191,7 @@ export default function MovieDetailsPage() {
   }
 
   const currentMovie = movie.data;
+  const saved = has(currentMovie.id);
   const suggestedMovies = (suggestions.data ?? []).slice(0, 5);
   const media = getMediaId(currentMovie.id);
   const isTvShow = media?.type === "tv";
@@ -359,7 +362,7 @@ export default function MovieDetailsPage() {
               {currentMovie.description}
             </p>
 
-            <div className="mt-7 hidden flex-wrap gap-3 sm:mt-9 sm:flex sm:gap-5">
+            <div className="mt-7 flex flex-wrap gap-3 sm:mt-9 sm:gap-5">
               <button
                 type="button"
                 onClick={() => setIsPlaying(true)}
@@ -375,6 +378,24 @@ export default function MovieDetailsPage() {
               >
                 <Film className="h-6 w-6" />
                 Watch Trailer
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  saved ? remove(currentMovie.id) : add(currentMovie)
+                }
+                className={cn(
+                  "flex h-[50px] cursor-pointer items-center gap-3 rounded-[7px] px-6 text-[17px] font-semibold text-white shadow-[0_18px_38px_rgba(0,0,0,0.22)] transition sm:h-[58px] sm:gap-4 sm:px-8 sm:text-[22px]",
+                  saved
+                    ? "bg-[#8f1d58] ring-1 ring-[#ff75bd]/40 hover:bg-[#701142]"
+                    : "bg-[#ee3e9f] hover:bg-[#c81979]",
+                )}
+                aria-label={
+                  saved ? "Remove from watchlist" : "Add to watchlist"
+                }
+              >
+                <Heart className={saved ? "h-6 w-6 fill-current" : "h-6 w-6"} />
+                {saved ? "Remove from watchlist" : "Add to watchlist"}
               </button>
             </div>
           </div>
