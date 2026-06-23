@@ -71,8 +71,7 @@ const playerServers: {
   {
     id: "zxcstream",
     label: "Server 4",
-    movieUrl: (tmdbId) =>
-      `https://zxcstream.xyz/player/movie/${tmdbId}`,
+    movieUrl: (tmdbId) => `https://zxcstream.xyz/player/movie/${tmdbId}`,
     tvUrl: (tmdbId, season, episode) =>
       `https://zxcstream.xyz/player/tv/${tmdbId}/${season}/${episode}`,
   },
@@ -354,7 +353,7 @@ export default function MovieDetailsPage() {
               <button
                 type="button"
                 onClick={() => setIsPlaying(true)}
-                className="flex h-[50px] cursor-pointer items-center gap-3 rounded-[7px] bg-[#ee3e9f] px-7 text-[17px] font-semibold text-white shadow-[0_18px_38px_rgba(236,72,153,0.34)] transition hover:bg-[#c81979] sm:h-[58px] sm:gap-4 sm:px-11 sm:text-[22px]"
+                className="md:flex h-[50px] cursor-pointer items-center gap-3 rounded-[7px] bg-[#ee3e9f] px-7 text-[17px] font-semibold text-white shadow-[0_18px_38px_rgba(236,72,153,0.34)] transition hidden hover:bg-[#c81979] sm:h-[58px] sm:gap-4 sm:px-11 sm:text-[22px]"
               >
                 <Play className="h-6 w-6 fill-current" />
                 Play
