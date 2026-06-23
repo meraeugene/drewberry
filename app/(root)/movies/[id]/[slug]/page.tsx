@@ -39,12 +39,43 @@ function getMediaId(id: string) {
   return null;
 }
 
-type PlayerServer = "vidsrc" | "vidking" | "videasy";
+type PlayerServer = "streamimdb" | "videasy" | "111movies" | "zxcstream";
 
-const playerServers: { id: PlayerServer; label: string }[] = [
-  { id: "vidsrc", label: "Server 1" },
-  { id: "vidking", label: "Server 2" },
-  { id: "videasy", label: "Server 3" },
+const playerServers: {
+  id: PlayerServer;
+  label: string;
+  movieUrl: (tmdbId: string) => string;
+  tvUrl: (tmdbId: string, season: number, episode: number) => string;
+}[] = [
+  {
+    id: "streamimdb",
+    label: "Server 1",
+    movieUrl: (tmdbId) => `https://streamimdb.ru/embed/movie/${tmdbId}`,
+    tvUrl: (tmdbId, season, episode) =>
+      `https://streamimdb.ru/embed/tv/${tmdbId}/${season}/${episode}`,
+  },
+  {
+    id: "videasy",
+    label: "Server 2",
+    movieUrl: (tmdbId) => `https://player.videasy.net/movie/${tmdbId}`,
+    tvUrl: (tmdbId, season, episode) =>
+      `https://player.videasy.net/tv/${tmdbId}/${season}/${episode}`,
+  },
+  {
+    id: "111movies",
+    label: "Server 3",
+    movieUrl: (tmdbId) => `https://111movies.net/movie/${tmdbId}`,
+    tvUrl: (tmdbId, season, episode) =>
+      `https://111movies.net/tv/${tmdbId}/${season}/${episode}`,
+  },
+  {
+    id: "zxcstream",
+    label: "Server 4",
+    movieUrl: (tmdbId) =>
+      `https://zxcstream.xyz/player/movie/${tmdbId}`,
+    tvUrl: (tmdbId, season, episode) =>
+      `https://zxcstream.xyz/player/tv/${tmdbId}/${season}/${episode}`,
+  },
 ];
 
 function playerUrl({
@@ -52,63 +83,21 @@ function playerUrl({
   id,
   season,
   episode,
-  autoPlay,
 }: {
   server: PlayerServer;
   id: string;
   season: number;
   episode: number;
-  autoPlay: boolean;
 }) {
   const media = getMediaId(id);
   if (!media) return "";
 
-  // VIDSRC (FIRST PRIORITY)
-  if (server === "vidsrc") {
-    if (media.type === "tv") {
-      return `https://vidsrc-embed.ru/embed/tv/${media.id}/${season}/${episode}`;
-    }
+  const selectedServer = playerServers.find(({ id }) => id === server);
+  if (!selectedServer) return "";
 
-    return `https://vidsrc-embed.ru/embed/movie/${media.id}`;
-  }
-
-  // VIDKING (SECOND PRIORITY)
-  if (server === "vidking") {
-    const params = new URLSearchParams({
-      color: "EC4899",
-      autoPlay: String(autoPlay),
-    });
-
-    if (media.type === "tv") {
-      params.set("nextEpisode", "true");
-      params.set("episodeSelector", "true");
-
-      return `https://www.vidking.net/embed/tv/${media.id}/${season}/${episode}?${params.toString()}`;
-    }
-
-    return `https://www.vidking.net/embed/movie/${media.id}?${params.toString()}`;
-  }
-
-  // VIDEASY (THIRD PRIORITY)
-  if (server === "videasy") {
-    const params = new URLSearchParams({
-      overlay: "true",
-      color: "EC4899",
-      autoPlay: String(autoPlay),
-    });
-
-    if (media.type === "tv") {
-      params.set("nextEpisode", "true");
-      params.set("episodeSelector", "true");
-      params.set("autoplayNextEpisode", String(autoPlay));
-
-      return `https://player.videasy.net/tv/${media.id}/${season}/${episode}?${params.toString()}`;
-    }
-
-    return `https://player.videasy.net/movie/${media.id}?${params.toString()}`;
-  }
-
-  return "";
+  return media.type === "tv"
+    ? selectedServer.tvUrl(media.id, season, episode)
+    : selectedServer.movieUrl(media.id);
 }
 
 function useMediaQuery(query: string) {
@@ -173,7 +162,8 @@ export default function MovieDetailsPage() {
   const suggestions = useMovieSuggestions(params.id);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-  const [selectedServer, setSelectedServer] = useState<PlayerServer>("vidsrc");
+  const [selectedServer, setSelectedServer] =
+    useState<PlayerServer>("streamimdb");
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const isDesktopViewport = useMediaQuery("(min-width: 1024px)");
@@ -209,7 +199,6 @@ export default function MovieDetailsPage() {
         id: currentMovie.id,
         season: activeSeasonNumber,
         episode: activeEpisode,
-        autoPlay: false,
       })
     : currentMovie.trailer_url;
   const playbackWatchUrl = media
@@ -218,7 +207,6 @@ export default function MovieDetailsPage() {
         id: currentMovie.id,
         season: activeSeasonNumber,
         episode: activeEpisode,
-        autoPlay: true,
       })
     : currentMovie.trailer_url;
   const playerTitle = isTvShow
