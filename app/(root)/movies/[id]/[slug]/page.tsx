@@ -48,25 +48,25 @@ const playerServers: {
   tvUrl: (tmdbId: string, season: number, episode: number) => string;
 }[] = [
   {
-    id: "streamimdb",
-    label: "Server 1",
-    movieUrl: (tmdbId) => `https://streamimdb.ru/embed/movie/${tmdbId}`,
-    tvUrl: (tmdbId, season, episode) =>
-      `https://streamimdb.ru/embed/tv/${tmdbId}/${season}/${episode}`,
-  },
-  {
     id: "videasy",
-    label: "Server 2",
+    label: "Server 1",
     movieUrl: (tmdbId) => `https://player.videasy.net/movie/${tmdbId}`,
     tvUrl: (tmdbId, season, episode) =>
       `https://player.videasy.net/tv/${tmdbId}/${season}/${episode}`,
   },
   {
     id: "111movies",
-    label: "Server 3",
+    label: "Server 2",
     movieUrl: (tmdbId) => `https://111movies.net/movie/${tmdbId}`,
     tvUrl: (tmdbId, season, episode) =>
       `https://111movies.net/tv/${tmdbId}/${season}/${episode}`,
+  },
+  {
+    id: "streamimdb",
+    label: "Server 3",
+    movieUrl: (tmdbId) => `https://streamimdb.ru/embed/movie/${tmdbId}`,
+    tvUrl: (tmdbId, season, episode) =>
+      `https://streamimdb.ru/embed/tv/${tmdbId}/${season}/${episode}`,
   },
   {
     id: "zxcstream",
