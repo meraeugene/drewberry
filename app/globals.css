@@ -68,6 +68,17 @@ span {
   background: linear-gradient(180deg, #ff9bd1, #ff5fb6);
 }
 
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
 @media (max-width: 1024px) {
   * {
     -ms-overflow-style: none;

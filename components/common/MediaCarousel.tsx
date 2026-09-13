@@ -168,7 +168,7 @@ export function MediaCarousel({
       ) : null}
       <div
         ref={rowRef}
-        className="-my-4 flex overflow-x-auto scroll-smooth py-4 pr-4 [scrollbar-width:none] sm:pr-6 lg:pr-9 [&::-webkit-scrollbar]:hidden"
+        className="scrollbar-none -my-4 flex overflow-x-auto scroll-smooth py-4 pr-4 sm:pr-6 lg:pr-9"
       >
         {setIndexes.map((setIndex) => (
           <div
